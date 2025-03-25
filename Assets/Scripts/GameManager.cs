@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public GameObject[] npcs; // NPC 오브젝트 배열
     public float moveRadius = 5f; // NPC 이동 반경
     public float moveSpeed = 2f; // NPC 이동 속도
+    public float characterMoveSpeed = 5f; // 캐릭터 이동 속도
+    public Rigidbody2D characterRigidbody; // 캐릭터 Rigidbody2D
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +34,8 @@ public class GameManager : MonoBehaviour
         {
             CheckNPCClick();
         }
+
+        HandleCharacterMovement();
     }
 
     void StartDigging()
@@ -78,6 +82,18 @@ public class GameManager : MonoBehaviour
             }
 
             yield return new WaitForSeconds(Random.Range(1f, 3f)); // Wait before moving again
+        }
+    }
+
+    void HandleCharacterMovement()
+    {
+        float moveX = Input.GetAxis("Horizontal"); // A/D or Left/Right Arrow
+        float moveY = Input.GetAxis("Vertical");   // W/S or Up/Down Arrow
+
+        Vector2 movement = new Vector2(moveX, moveY) * characterMoveSpeed * Time.deltaTime;
+        if (characterRigidbody != null)
+        {
+            characterRigidbody.MovePosition(characterRigidbody.position + movement);
         }
     }
 }
